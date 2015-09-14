@@ -51,31 +51,22 @@ function detect_swipe_events(element_to_detect) {
         var event_type = Math.max(swipe_x_difference, swipe_y_difference) > swipe_move_threshold ?
             (swipe_x_difference > swipe_y_difference ? (swipe_start_x > swipe_end_x ? 'swipe_left' : 'swipe_right') : (swipe_start_y > swipe_end_y ? 'swipe_up' : 'swipe_down')) : 'swipe_double_tap';
         return event_type;
-<<<<<<< HEAD
       },
       f = {
-=======
-      };
-    
-    
-    var swipe_object = new Object();
-    
-    swipe_object = {
->>>>>>> master
         touch: {
-          touch_start: function (event) {
-            swipe_start_x = event.touches[0].pageX;
-            swipe_start_y = event.touches[0].pageY;
+          touch_start: function (e) {
+            swipe_start_x = e.touches[0].pageX;
+            swipe_start_y = e.touches[0].pageY;
             swipe_start_tap = Date.now();
-            return swipe_event(event, 'swipe_tap');
+            return swipe_event(e, 'swipe_tap');
           },
-          touch_move: function (event) {
+          touch_move: function (e) {
             swipe_active = true;
-            swipe_end_x = event.touches[0].pageX;
-            swipe_end_y = event.touches[0].pageY;
+            swipe_end_x = e.touches[0].pageX;
+            swipe_end_y = e.touches[0].pageY;
             return 1;
           },
-          touchend: function (event) {
+          touchend: function (e) {
             swipe_tap_end = Date.now();
             if (!swipe_active) {
               return swipe_event(e, 'swipe_double_tap');
@@ -83,44 +74,44 @@ function detect_swipe_events(element_to_detect) {
             swipe_active = false;
             return swipe_event(e, swipe_event_type());
           },
-          touchcancel: function (event) {
+          touchcancel: function (e) {
             swipe_active = false;
             return 1;
           }
         },
         mouse: {
-          // event.button : left = 0, middle = 1, right = 2 - or left handed reversed.
-          mousedown: function (event) {
-            if (event.button) {
-              return event.button;
+          // e.button : left = 0, middle = 1, right = 2 - or left handed reversed.
+          mousedown: function (e) {
+            if (e.button) {
+              return e.button;
             }
             mouse_button_down = 1; // only left is considered mouse_button_down
-            swipe_start_x = event.clientX;
-            swipe_start_y = event.clientY;
+            swipe_start_x = e.clientX;
+            swipe_start_y = e.clientY;
             swipe_start_tap = Date.now();
-            return swipe_event(event, 'swipe_tap');
+            return swipe_event(e, 'swipe_tap');
           },
-          mousemove: function (event) {
+          mousemove: function (e) {
             if (!mouse_button_down) {
               return !mouse_button_down;
             }
             swipe_active = true;
-            swipe_end_x = event.clientX;
-            swipe_end_y = event.clientY;
+            swipe_end_x = e.clientX;
+            swipe_end_y = e.clientY;
             return 1;
           },
-          mouseup: function (event) {
+          mouseup: function (e) {
             swipe_tap_end = Date.now();
             //console.log('Total time: ' + (swipe_tap_end - swipe_start_tap));
-            if (event.button) {
-              return event.button;
+            if (e.button) {
+              return e.button;
             }
             mouse_button_down = 0;
             if (!swipe_active) {
-              return swipe_event(event, 'swipe_double_tap');
+              return swipe_event(e, 'swipe_double_tap');
             }
             swipe_active = false;
-            return swipe_event(event, swipe_event_type());
+            return swipe_event(e, swipe_event_type());
           }
         }
       };
@@ -175,7 +166,7 @@ function add_mobile_event_listners(element_name) {
 
     
     detect_swipe_events(document);
-    add_mobile_event_listners('div');
+    add_mobile_event_listners('li');
 
     
 });
