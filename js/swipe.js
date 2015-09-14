@@ -54,7 +54,9 @@ function detect_swipe_events(element_to_detect) {
       };
     
     
-    var swipe_object = {
+    var swipe_object = new Object();
+    
+    swipe_object = {
         touch: {
           touch_start: function (event) {
             swipe_start_x = event.touches[0].pageX;
