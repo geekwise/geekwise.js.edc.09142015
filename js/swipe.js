@@ -51,22 +51,25 @@ function detect_swipe_events(element_to_detect) {
         var event_type = Math.max(swipe_x_difference, swipe_y_difference) > swipe_move_threshold ?
             (swipe_x_difference > swipe_y_difference ? (swipe_start_x > swipe_end_x ? 'swipe_left' : 'swipe_right') : (swipe_start_y > swipe_end_y ? 'swipe_up' : 'swipe_down')) : 'swipe_double_tap';
         return event_type;
-      },
-      f = {
+      };
+      
+    var swipe_object = Object.create(Object);
+    
+    swipe_object = {
         touch: {
-          touchstart: function (e) {
+          touch_start: function (e) {
             swipe_start_x = e.touches[0].pageX;
             swipe_start_y = e.touches[0].pageY;
             swipe_start_tap = Date.now();
             return swipe_event(e, 'swipe_tap');
           },
-          touchmove: function (e) {
+          touch_move: function (e) {
             swipe_active = true;
             swipe_end_x = e.touches[0].pageX;
             swipe_end_y = e.touches[0].pageY;
             return 1;
           },
-          touchend: function (e) {
+          touch_end: function (e) {
             swipe_tap_end = Date.now();
             if (!swipe_active) {
               return swipe_event(e, 'swipe_double_tap');
@@ -74,14 +77,14 @@ function detect_swipe_events(element_to_detect) {
             swipe_active = false;
             return swipe_event(e, swipe_event_tyoe());
           },
-          touchcancel: function (e) {
+          touch_cancel: function (e) {
             swipe_active = false;
             return 1;
           }
         },
         mouse: {
           // e.button : left = 0, middle = 1, right = 2 - or left handed reversed.
-          mousedown: function (e) {
+          mouse_down: function (e) {
             if (e.button) {
               return e.button;
             }
@@ -91,7 +94,7 @@ function detect_swipe_events(element_to_detect) {
             swipe_start_tap = Date.now();
             return swipe_event(e, 'swipe_tap');
           },
-          mousemove: function (e) {
+          mouse_move: function (e) {
             if (!mouse_button_down) {
               return !mouse_button_down;
             }
@@ -100,7 +103,7 @@ function detect_swipe_events(element_to_detect) {
             swipe_end_y = e.clientY;
             return 1;
           },
-          mouseup: function (e) {
+          mouse_up: function (e) {
             swipe_tap_end = Date.now();
             //console.log('Total time: ' + (swipe_tap_end - swipe_start_tap));
             if (e.button) {
@@ -115,8 +118,8 @@ function detect_swipe_events(element_to_detect) {
           }
         }
       };
-  for (var event_name in f[browser_type]) {
-    element_to_detect.addEventListener(event_name, f[browser_type][event_name], false);
+  for (var event_name in swipe_object[browser_type]) {
+    element_to_detect.addEventListener(event_name, swipe_object[browser_type][event_name], false);
   }
 };
 
