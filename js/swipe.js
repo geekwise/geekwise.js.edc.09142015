@@ -1,21 +1,37 @@
 document.addEventListener('DOMContentLoaded',function(){
 function detect_swipe_events(element_to_detect) {
-
-    var abs = Math.abs;
-    var max = Math.max;
         
     var createEvent = function (element, event_type) {
-        var a = element_to_detect.createEvent("CustomEvent");
-        a.initCustomEvent(event_type, true, true, element.target);
-        element.target.dispatchEvent(a);
-        a = null;
+        var event_action = element_to_detect.createEvent("CustomEvent");
+        event_action.initCustomEvent(event_type, true, true, element.target);
+        element.target.dispatchEvent(event_action);
+        event_action = null;
         return 1;
       };
     
     
-      var mobile_browser_type = (/Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'touch' : 'mouse');
+    var mobile_browsers = [
+        'iphone',
+        'ipad',
+        'ipod',
+        'android'
+    ];
+    
+    var mobile_browser_name = new RegExp(mobile_browsers.join('|'));
 
 
+    browser_type_test = function(){
+        if(mobile_browser_name.test(navigator.userAgent)){
+            return 'touch';
+           }
+        else{
+            return 'mouse';
+            }
+    };
+    
+    var browser_type = browser_type_test();
+
+    
       var moved = false,
       buttonDown = 0,
       pressedMoveThreshold = 20,
@@ -24,9 +40,9 @@ function detect_swipe_events(element_to_detect) {
       endx, endy,
       xdiff, ydiff,
       calcEventType = function () {
-        xdiff = abs(endx - startx);
-        ydiff = abs(endy - starty);
-        var event_type = max(xdiff, ydiff) > pressedMoveThreshold ?
+        xdiff = Math.abs(endx - startx);
+        ydiff = Math.abs(endy - starty);
+        var event_type = Math.max(xdiff, ydiff) > pressedMoveThreshold ?
             (xdiff > ydiff ? (startx > endx ? 'swipe_left' : 'swipe_right') : (starty > endy ? 'swipe_up' : 'swipe_down')) : 'swipe_double_tap';
         return event_type;
       },
@@ -93,8 +109,8 @@ function detect_swipe_events(element_to_detect) {
           }
         }
       };
-  for (var event_name in f[mobile_browser_type]) {
-    element_to_detect.addEventListener(event_name, f[mobile_browser_type][event_name], false);
+  for (var event_name in f[browser_type]) {
+    element_to_detect.addEventListener(event_name, f[browser_type][event_name], false);
   }
 };
 
@@ -144,7 +160,7 @@ function addAllListeners(element_name) {
 
     
     detect_swipe_events(document);
-    addAllListeners('li');
+    addAllListeners('div');
 
     
 });
