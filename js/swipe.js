@@ -32,13 +32,19 @@ function detect_swipe_events(element_to_detect) {
     var browser_type = browser_type_test();
 
     
-      var moved = false,
-      buttonDown = 0,
-      pressedMoveThreshold = 20,
-      startdt, endt,
-      startx, starty,
-      endx, endy,
-      xdiff, ydiff,
+    var moved = false;
+    var buttonDown = 0;
+    var pressedMoveThreshold = 20;
+    
+    var startdt;
+    var endt;
+    var startx;
+    var starty;
+    var endx;
+    var endy;
+    var xdiff;
+    var ydiff;
+
       calcEventType = function () {
         xdiff = Math.abs(endx - startx);
         ydiff = Math.abs(endy - starty);
