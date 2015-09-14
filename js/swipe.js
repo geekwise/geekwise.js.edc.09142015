@@ -51,8 +51,10 @@ function detect_swipe_events(element_to_detect) {
         var event_type = Math.max(swipe_x_difference, swipe_y_difference) > swipe_move_threshold ?
             (swipe_x_difference > swipe_y_difference ? (swipe_start_x > swipe_end_x ? 'swipe_left' : 'swipe_right') : (swipe_start_y > swipe_end_y ? 'swipe_up' : 'swipe_down')) : 'swipe_double_tap';
         return event_type;
-      },
-      f = {
+      };
+    
+    
+    var swipe_object = {
         touch: {
           touch_start: function (event) {
             swipe_start_x = event.touches[0].pageX;
@@ -115,8 +117,8 @@ function detect_swipe_events(element_to_detect) {
           }
         }
       };
-  for (var event_name in f[browser_type]) {
-    element_to_detect.addEventListener(event_name, f[browser_type][event_name], false);
+  for (var event_name in swipe_object[browser_type]) {
+    element_to_detect.addEventListener(event_name, swipe_object[browser_type][event_name], false);
   }
 };
 
